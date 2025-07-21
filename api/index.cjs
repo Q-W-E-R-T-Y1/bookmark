@@ -1,9 +1,11 @@
-
+const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 // Initialize data
 let bookmarks = [];
@@ -83,13 +85,4 @@ app.put('/api/folders/:id', (req, res) => {
 });
 
 app.delete('/api/folders/:id', (req, res) => {
-  const index = folders.findIndex(f => f.id === req.params.id);
-  if (index !== -1) {
-    folders.splice(index, 1);
-    res.json({ message: 'Folder deleted' });
-  } else {
-    res.status(404).json({ message: 'Folder not found' });
-  }
-});
-
-export default app;
+  const index = folders.findIndex(f => f.id ===
