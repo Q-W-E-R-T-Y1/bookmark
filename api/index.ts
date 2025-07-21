@@ -36,6 +36,7 @@ let folders: Folder[] = [
 // Login endpoint
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
+  console.log('Login attempt:', { username, password });
   if (username === 'admin' && password === 'password') {
     res.json({ success: true, message: 'Login successful' });
   } else {
