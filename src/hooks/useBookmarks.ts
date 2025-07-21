@@ -1,107 +1,110 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Bookmark, Folder } from '@/types/bookmark';
 
-// Mock data for development
-const initialFolders: Folder[] = [
-  { id: 'root', name: 'All Bookmarks', createdAt: new Date() },
-  { id: 'work', name: 'Work', parentId: 'root', color: 'blue', createdAt: new Date() },
-  { id: 'personal', name: 'Personal', parentId: 'root', color: 'green', createdAt: new Date() },
-  { id: 'dev', name: 'Development', parentId: 'work', color: 'purple', createdAt: new Date() },
-  { id: 'design', name: 'Design', parentId: 'work', color: 'pink', createdAt: new Date() },
-];
-
-const initialBookmarks: Bookmark[] = [
-  {
-    id: '1',
-    title: 'React Documentation',
-    url: 'https://react.dev',
-    description: 'The official React documentation',
-    folderId: 'dev',
-    createdAt: new Date('2024-01-15'),
-    thumbnail: 'https://react.dev/images/home/conf2021/cover.svg'
-  },
-  {
-    id: '2',
-    title: 'Figma',
-    url: 'https://figma.com',
-    description: 'Collaborative design tool',
-    folderId: 'design',
-    createdAt: new Date('2024-01-10'),
-    thumbnail: 'https://cdn.worldvectorlogo.com/logos/figma-5.svg'
-  },
-  {
-    id: '3',
-    title: 'GitHub',
-    url: 'https://github.com',
-    description: 'Code repository and collaboration platform',
-    folderId: 'dev',
-    createdAt: new Date('2024-01-20'),
-    thumbnail: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'
-  },
-  {
-    id: '4',
-    title: 'YouTube',
-    url: 'https://youtube.com',
-    description: 'Video sharing platform',
-    folderId: 'personal',
-    createdAt: new Date('2024-01-12'),
-    thumbnail: 'https://www.youtube.com/s/desktop/12345678/img/favicon_144.png'
-  }
-];
-
 export function useBookmarks() {
-  const [bookmarks, setBookmarks] = useState<Bookmark[]>(initialBookmarks);
-  const [folders, setFolders] = useState<Folder[]>(initialFolders);
+  const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const [folders, setFolders] = useState<Folder[]>([]);
   const [currentFolderId, setCurrentFolderId] = useState<string>('root');
 
-  const addBookmark = (bookmark: Omit<Bookmark, 'id' | 'createdAt'>) => {
-    const newBookmark: Bookmark = {
-      ...bookmark,
-      id: Date.now().toString(),
-      createdAt: new Date(),
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [bookmarksRes, foldersRes] = await Promise.all([
+          fetch('/api/bookmarks'),
+          fetch('/api/folders'),
+        ]);
+        const bookmarksData = await bookmarksRes.json();
+        const foldersData = await foldersRes.json();
+        setBookmarks(bookmarksData);
+        setFolders(foldersData);
+      } catch (error) {
+        console.error('Failed to fetch data', error);
+      }
     };
-    setBookmarks(prev => [...prev, newBookmark]);
+
+    fetchData();
+  }, []);
+
+  const addBookmark = async (bookmark: Omit<Bookmark, 'id' | 'createdAt'>) => {
+    try {
+      const response = await fetch('/api/bookmarks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bookmark),
+      });
+      const newBookmark = await response.json();
+      setBookmarks(prev => [...prev, newBookmark]);
+    } catch (error) {
+      console.error('Failed to add bookmark', error);
+    }
   };
 
-  const updateBookmark = (id: string, updates: Partial<Bookmark>) => {
-    setBookmarks(prev => prev.map(bookmark => 
-      bookmark.id === id ? { ...bookmark, ...updates } : bookmark
-    ));
+  const updateBookmark = async (id: string, updates: Partial<Bookmark>) => {
+    try {
+      const response = await fetch(`/api/bookmarks/${id}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updates),
+        }
+      );
+      const updatedBookmark = await response.json();
+      setBookmarks(prev => prev.map(b => (b.id === id ? updatedBookmark : b)));
+    } catch (error) {
+      console.error('Failed to update bookmark', error);
+    }
   };
 
-  const deleteBookmark = (id: string) => {
-    setBookmarks(prev => prev.filter(bookmark => bookmark.id !== id));
+  const deleteBookmark = async (id: string) => {
+    try {
+      await fetch(`/api/bookmarks/${id}`, {
+        method: 'DELETE',
+      });
+      setBookmarks(prev => prev.filter(b => b.id !== id));
+    } catch (error) {
+      console.error('Failed to delete bookmark', error);
+    }
   };
 
-  const addFolder = (folder: Omit<Folder, 'id' | 'createdAt'>) => {
-    const newFolder: Folder = {
-      ...folder,
-      id: Date.now().toString(),
-      createdAt: new Date(),
-    };
-    setFolders(prev => [...prev, newFolder]);
+  const addFolder = async (folder: Omit<Folder, 'id' | 'createdAt'>) => {
+    try {
+      const response = await fetch('/api/folders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(folder),
+      });
+      const newFolder = await response.json();
+      setFolders(prev => [...prev, newFolder]);
+    } catch (error) {
+      console.error('Failed to add folder', error);
+    }
   };
 
-  const updateFolder = (id: string, updates: Partial<Folder>) => {
-    setFolders(prev => prev.map(folder => 
-      folder.id === id ? { ...folder, ...updates } : folder
-    ));
+  const updateFolder = async (id: string, updates: Partial<Folder>) => {
+    try {
+      const response = await fetch(`/api/folders/${id}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updates),
+        }
+      );
+      const updatedFolder = await response.json();
+      setFolders(prev => prev.map(f => (f.id === id ? updatedFolder : f)));
+    } catch (error) {
+      console.error('Failed to update folder', error);
+    }
   };
 
-  const deleteFolder = (id: string) => {
-    // Move bookmarks to parent folder or root
-    const folder = folders.find(f => f.id === id);
-    const parentId = folder?.parentId || 'root';
-    
-    setBookmarks(prev => prev.map(bookmark => 
-      bookmark.folderId === id ? { ...bookmark, folderId: parentId } : bookmark
-    ));
-    
-    setFolders(prev => prev.filter(folder => folder.id !== id));
-  };
-
-  const moveBookmark = (bookmarkId: string, targetFolderId: string) => {
-    updateBookmark(bookmarkId, { folderId: targetFolderId });
+  const deleteFolder = async (id: string) => {
+    try {
+      await fetch(`/api/folders/${id}`, {
+        method: 'DELETE',
+      });
+      setFolders(prev => prev.filter(f => f.id !== id));
+    } catch (error) {
+      console.error('Failed to delete folder', error);
+    }
   };
 
   const getBookmarksInFolder = (folderId: string) => {
@@ -116,8 +119,8 @@ export function useBookmarks() {
   };
 
   const importBookmarks = (importedBookmarks: Bookmark[], importedFolders: Folder[]) => {
-    setFolders(prev => [...prev, ...importedFolders]);
-    setBookmarks(prev => [...prev, ...importedBookmarks]);
+    // This needs to be implemented on the backend
+    console.log('Importing bookmarks is not implemented on the backend yet');
   };
 
   const searchBookmarksAndFolders = (query: string) => {
@@ -147,7 +150,6 @@ export function useBookmarks() {
     addFolder,
     updateFolder,
     deleteFolder,
-    moveBookmark,
     getBookmarksInFolder,
     getSubfolders,
     importBookmarks,

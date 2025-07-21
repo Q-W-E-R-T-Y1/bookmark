@@ -1,0 +1,47 @@
+{
+  "folders": [
+    { "id": "root", "name": "All Bookmarks", "createdAt": "2025-07-21T12:00:00.000Z" },
+    { "id": "work", "name": "Work", "parentId": "root", "color": "blue", "createdAt": "2025-07-21T12:00:00.000Z" },
+    { "id": "personal", "name": "Personal", "parentId": "root", "color": "green", "createdAt": "2025-07-21T12:00:00.000Z" },
+    { "id": "dev", "name": "Development", "parentId": "work", "color": "purple", "createdAt": "2025-07-21T12:00:00.000Z" },
+    { "id": "design", "name": "Design", "parentId": "work", "color": "pink", "createdAt": "2025-07-21T12:00:00.000Z" }
+  ],
+  "bookmarks": [
+    {
+      "id": "1",
+      "title": "React Documentation",
+      "url": "https://react.dev",
+      "description": "The official React documentation",
+      "folderId": "dev",
+      "createdAt": "2024-01-15T00:00:00.000Z",
+      "thumbnail": "https://react.dev/images/home/conf2021/cover.svg"
+    },
+    {
+      "id": "2",
+      "title": "Figma",
+      "url": "https://figma.com",
+      "description": "Collaborative design tool",
+      "folderId": "design",
+      "createdAt": "2024-01-10T00:00:00.000Z",
+      "thumbnail": "https://cdn.worldvectorlogo.com/logos/figma-5.svg"
+    },
+    {
+      "id": "3",
+      "title": "GitHub",
+      "url": "https://github.com",
+      "description": "Code repository and collaboration platform",
+      "folderId": "dev",
+      "createdAt": "2024-01-20T00:00:00.000Z",
+      "thumbnail": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+    },
+    {
+      "id": "4",
+      "title": "YouTube",
+      "url": "https://youtube.com",
+      "description": "Video sharing platform",
+      "folderId": "personal",
+      "createdAt": "2024-01-12T00:00:00.000Z",
+      "thumbnail": "https://www.youtube.com/s/desktop/12345678/img/favicon_144.png"
+    }
+  ]
+}
