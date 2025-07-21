@@ -85,4 +85,14 @@ app.put('/api/folders/:id', (req, res) => {
 });
 
 app.delete('/api/folders/:id', (req, res) => {
-  const index = folders.findIndex(f => f.id ===
+  const index = folders.findIndex(f => f.id === req.params.id);
+  if (index !== -1) {
+    folders.splice(index, 1);
+    res.json({ message: 'Folder deleted' });
+  } else {
+    res.status(404).json({ message: 'Folder not found' });
+  }
+});
+
+// Export app for server usage
+module.exports = app;
