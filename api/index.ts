@@ -114,4 +114,4 @@ app.delete('/api/folders/:id', (req, res) => {
   }
 });
 
-module.exports = app;
+export default app;

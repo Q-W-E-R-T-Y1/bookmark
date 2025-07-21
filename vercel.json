@@ -2,8 +2,12 @@
   "version": 2,
   "builds": [
     {
-      "src": "./api/index.ts",
-      "use": "@vercel/node"
+      "src": "api/index.ts",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["api/dist/**"],
+        "buildCommand": "tsc -p api/tsconfig.api.json"
+      }
     },
     {
       "src": "./package.json",
@@ -16,7 +20,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/index.ts"
+      "dest": "/api/dist/index.js"
     },
     {
       "src": "/(.*)",
