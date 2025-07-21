@@ -8,7 +8,7 @@ const app = express();
 const port = 3001;
 const dbPath = path.join(__dirname, 'db.json');
 
-app.use(cors({ origin: 'http://localhost:8080' }));
+app.use(cors());
 app.use(bodyParser.json());
 
 // Helper function to read data from db.json
