@@ -115,6 +115,11 @@ export function useBookmarks() {
     return folders.filter(folder => folder.parentId === parentId);
   };
 
+  const importBookmarks = (importedBookmarks: Bookmark[], importedFolders: Folder[]) => {
+    setFolders(prev => [...prev, ...importedFolders]);
+    setBookmarks(prev => [...prev, ...importedBookmarks]);
+  };
+
   const searchBookmarksAndFolders = (query: string) => {
     const normalizedQuery = query.toLowerCase();
     
@@ -145,6 +150,7 @@ export function useBookmarks() {
     moveBookmark,
     getBookmarksInFolder,
     getSubfolders,
+    importBookmarks,
     searchBookmarksAndFolders,
   };
 }

@@ -15,6 +15,7 @@ import { BookmarkCard } from './BookmarkCard';
 import { AddBookmarkDialog } from './AddBookmarkDialog';
 import { BookmarkPreview } from './BookmarkPreview';
 import { FolderDialog } from './FolderDialog';
+import { ImportBookmarksDialog } from './ImportBookmarksDialog';
 import { useToast } from '@/hooks/use-toast';
 
 type ViewMode = 'grid' | 'list';
@@ -34,6 +35,7 @@ export function BookmarkManager() {
     deleteFolder,
     getBookmarksInFolder,
     getSubfolders,
+    importBookmarks,
     searchBookmarksAndFolders,
   } = useBookmarks();
 
@@ -251,6 +253,8 @@ export function BookmarkManager() {
 
                 <Separator orientation="vertical" className="h-6" />
 
+                <ImportBookmarksDialog onImport={importBookmarks} />
+                
                 <Button onClick={handleAddBookmark}>
                   <Plus className="h-4 w-4 mr-2" />
                   Add Bookmark
