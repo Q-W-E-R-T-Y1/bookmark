@@ -5,8 +5,7 @@
       "src": "api/index.ts",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["api/dist/**"],
-        "buildCommand": "tsc -p api/tsconfig.api.json"
+        "runtime": "nodejs20.x"
       }
     },
     {
@@ -20,7 +19,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/dist/index.js"
+      "dest": "/api/index.ts"
     },
     {
       "src": "/(.*)",
