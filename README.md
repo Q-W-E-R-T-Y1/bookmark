@@ -50,8 +50,10 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-A server error has occurred
-
-FUNCTION_INVOCATION_FAILED
-
-fra1::sgzh8-1753106053570-beb33dd80aa1
+ReferenceError: exports is not defined in ES module scope
+This file is being treated as an ES module because it has a '.js' file extension and '/var/task/package.json' contains "type": "module". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.
+    at file:///var/task/api/index.js:5:23
+    at ModuleJob.run (node:internal/modules/esm/module_job:274:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async d (/opt/rust/nodejs.js:16:21147)
+Node.js process exited with exit status: 1. The logs above can help with debugging the issue.
