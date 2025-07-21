@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -7,13 +8,16 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
-// Initialize data
+const clientBuildPath = path.join(__dirname, 'dist');
+app.use(express.static(clientBuildPath));
+
+// In-memory data
 let bookmarks = [];
 let folders = [
   { id: 'root', name: 'All Bookmarks', createdAt: new Date() },
 ];
 
-// Login endpoint
+// API routes
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
   console.log('Login attempt:', { username, password });
@@ -24,10 +28,7 @@ app.post('/api/login', (req, res) => {
   }
 });
 
-// Bookmarks API
-app.get('/api/bookmarks', (req, res) => {
-  res.json(bookmarks);
-});
+app.get('/api/bookmarks', (req, res) => res.json(bookmarks));
 
 app.post('/api/bookmarks', (req, res) => {
   const newBookmark = {
@@ -59,10 +60,7 @@ app.delete('/api/bookmarks/:id', (req, res) => {
   }
 });
 
-// Folders API
-app.get('/api/folders', (req, res) => {
-  res.json(folders);
-});
+app.get('/api/folders', (req, res) => res.json(folders));
 
 app.post('/api/folders', (req, res) => {
   const newFolder = {
@@ -94,5 +92,10 @@ app.delete('/api/folders/:id', (req, res) => {
   }
 });
 
-// Export app for server usage
+// React fallback (for SPA routes like /login or /bookmarks)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(clientBuildPath, 'index.html'));
+});
+
+// Export app after all routes are defined
 module.exports = app;
