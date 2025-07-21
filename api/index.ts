@@ -1,26 +1,37 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import fs from 'fs';
-import path from 'path';
-
 const app = express();
 const port = 3001;
-const dbPath = path.join(__dirname, 'db.json');
 
 app.use(cors());
 app.use(bodyParser.json());
 
-// Helper function to read data from db.json
-const readData = () => {
-  const data = fs.readFileSync(dbPath, 'utf8');
-  return JSON.parse(data);
-};
+interface Bookmark {
+  id: string;
+  title: string;
+  url: string;
+  description?: string;
+  thumbnail?: string;
+  favicon?: string;
+  folderId: string;
+  createdAt: Date;
+  lastVisited?: Date;
+  notes?: string;
+}
 
-// Helper function to write data to db.json
-const writeData = (data: any) => {
-  fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
-};
+interface Folder {
+  id: string;
+  name: string;
+  parentId?: string;
+  color?: string;
+  createdAt: Date;
+}
+
+let bookmarks: Bookmark[] = [];
+let folders: Folder[] = [
+  { id: 'root', name: 'All Bookmarks', createdAt: new Date() },
+];
 
 // Login endpoint
 app.post('/api/login', (req, res) => {
@@ -34,40 +45,33 @@ app.post('/api/login', (req, res) => {
 
 // Bookmarks API
 app.get('/api/bookmarks', (req, res) => {
-  const data = readData();
-  res.json(data.bookmarks);
+  res.json(bookmarks);
 });
 
 app.post('/api/bookmarks', (req, res) => {
-  const data = readData();
-  const newBookmark = {
+  const newBookmark: Bookmark = {
     ...req.body,
     id: Date.now().toString(),
     createdAt: new Date(),
   };
-  data.bookmarks.push(newBookmark);
-  writeData(data);
+  bookmarks.push(newBookmark);
   res.json(newBookmark);
 });
 
 app.put('/api/bookmarks/:id', (req, res) => {
-  const data = readData();
-  const bookmarkIndex = data.bookmarks.findIndex((b: any) => b.id === req.params.id);
+  const bookmarkIndex = bookmarks.findIndex((b) => b.id === req.params.id);
   if (bookmarkIndex !== -1) {
-    data.bookmarks[bookmarkIndex] = { ...data.bookmarks[bookmarkIndex], ...req.body };
-    writeData(data);
-    res.json(data.bookmarks[bookmarkIndex]);
+    bookmarks[bookmarkIndex] = { ...bookmarks[bookmarkIndex], ...req.body };
+    res.json(bookmarks[bookmarkIndex]);
   } else {
     res.status(404).json({ message: 'Bookmark not found' });
   }
 });
 
 app.delete('/api/bookmarks/:id', (req, res) => {
-  const data = readData();
-  const bookmarkIndex = data.bookmarks.findIndex((b: any) => b.id === req.params.id);
+  const bookmarkIndex = bookmarks.findIndex((b) => b.id === req.params.id);
   if (bookmarkIndex !== -1) {
-    data.bookmarks.splice(bookmarkIndex, 1);
-    writeData(data);
+    bookmarks.splice(bookmarkIndex, 1);
     res.json({ message: 'Bookmark deleted' });
   } else {
     res.status(404).json({ message: 'Bookmark not found' });
@@ -76,40 +80,33 @@ app.delete('/api/bookmarks/:id', (req, res) => {
 
 // Folders API
 app.get('/api/folders', (req, res) => {
-  const data = readData();
-  res.json(data.folders);
+  res.json(folders);
 });
 
 app.post('/api/folders', (req, res) => {
-  const data = readData();
-  const newFolder = {
+  const newFolder: Folder = {
     ...req.body,
     id: Date.now().toString(),
     createdAt: new Date(),
   };
-  data.folders.push(newFolder);
-  writeData(data);
+  folders.push(newFolder);
   res.json(newFolder);
 });
 
 app.put('/api/folders/:id', (req, res) => {
-  const data = readData();
-  const folderIndex = data.folders.findIndex((f: any) => f.id === req.params.id);
+  const folderIndex = folders.findIndex((f) => f.id === req.params.id);
   if (folderIndex !== -1) {
-    data.folders[folderIndex] = { ...data.folders[folderIndex], ...req.body };
-    writeData(data);
-    res.json(data.folders[folderIndex]);
+    folders[folderIndex] = { ...folders[folderIndex], ...req.body };
+    res.json(folders[folderIndex]);
   } else {
     res.status(404).json({ message: 'Folder not found' });
   }
 });
 
 app.delete('/api/folders/:id', (req, res) => {
-  const data = readData();
-  const folderIndex = data.folders.findIndex((f: any) => f.id === req.params.id);
+  const folderIndex = folders.findIndex((f) => f.id === req.params.id);
   if (folderIndex !== -1) {
-    data.folders.splice(folderIndex, 1);
-    writeData(data);
+    folders.splice(folderIndex, 1);
     res.json({ message: 'Folder deleted' });
   } else {
     res.status(404).json({ message: 'Folder not found' });

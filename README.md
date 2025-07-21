@@ -49,3 +49,9 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+
+A server error has occurred
+
+FUNCTION_INVOCATION_FAILED
+
+fra1::sgzh8-1753106053570-beb33dd80aa1
