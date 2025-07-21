@@ -50,10 +50,27 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-ReferenceError: exports is not defined in ES module scope
-This file is being treated as an ES module because it has a '.js' file extension and '/var/task/package.json' contains "type": "module". To treat it as a CommonJS script, rename it to use the '.cjs' file extension.
-    at file:///var/task/api/index.js:5:23
-    at ModuleJob.run (node:internal/modules/esm/module_job:274:25)
-    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
-    at async d (/opt/rust/nodejs.js:16:21147)
+(node:4) Warning: Failed to load the ES module: /var/task/api/index.cjs. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:4) Warning: Failed to load the ES module: /var/task/api/index.cjs. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+/var/task/api/index.cjs:1
+import express from 'express';
+^^^^^^
+
+SyntaxError: Cannot use import statement outside a module
+    at wrapSafe (node:internal/modules/cjs/loader:1662:18)
+    at Module._compile (node:internal/modules/cjs/loader:1704:20)
+    at Object..js (node:internal/modules/cjs/loader:1895:10)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1282:12)
+    at /opt/rust/nodejs.js:2:12456
+    at Function.Ar (/opt/rust/nodejs.js:2:12834)
+    at De.e.<computed>._e._load (/opt/rust/nodejs.js:2:12426)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
 Node.js process exited with exit status: 1. The logs above can help with debugging the issue.
+A server error has occurred
+
+FUNCTION_INVOCATION_FAILED
+
+fra1::sq52b-1753107837380-218473a1dec9

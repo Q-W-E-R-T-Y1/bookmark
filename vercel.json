@@ -2,12 +2,9 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/index.cjs",
-      "use": "@vercel/node",
-      "config": {
-        "runtime": "nodejs20.x"
-      }
-    },
+      "src": "api/index.ts",
+      "use": "@vercel/node"
+    },,,
     {
       "src": "./package.json",
       "use": "@vercel/static-build",
@@ -19,7 +16,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/index.cjs"
+      "dest": "/api/index.ts"
     },
     {
       "src": "/(.*)",
