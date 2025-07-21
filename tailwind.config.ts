@@ -61,7 +61,20 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				'sidebar-bg': 'hsl(var(--sidebar-bg))',
+				'folder-bg': 'hsl(var(--folder-bg))',
+				'folder-hover': 'hsl(var(--folder-hover))',
+				'bookmark-card': 'hsl(var(--bookmark-card))',
+				'bookmark-border': 'hsl(var(--bookmark-border))',
+				'bookmark-hover': 'hsl(var(--bookmark-hover))',
+				'thumbnail-bg': 'hsl(var(--thumbnail-bg))',
+				'preview-bg': 'hsl(var(--preview-bg))',
+				'glass-bg': 'hsl(var(--glass-bg))'
+			},
+			boxShadow: {
+				'soft': '0 1px 2px hsl(var(--shadow-soft)), 0 1px 4px hsl(var(--shadow-soft))',
+				'elevated': '0 4px 8px hsl(var(--shadow-elevated)), 0 2px 4px hsl(var(--shadow-soft))',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
